@@ -27,9 +27,12 @@ body {
     padding: 20px;
 }
 
+h1, h2, h3, h4 {
+    margin: 10px 0;
+}
+
 h1, h2 {
     color: #ff3f81;
-    margin: 10px 0;
 }
 
 input {
@@ -79,6 +82,7 @@ img.profile {
 .countdown {
     margin: 10px;
     font-size: 16px;
+    color: #444;
 }
 
 @media (max-width: 600px) {
@@ -91,11 +95,10 @@ img.profile {
 
 <body>
 
-<audio autoplay loop>
+<audio autoplay loop id="bgMusic">
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- NAME INPUT SCREEN -->
 <div class="screen" id="nameScreen">
     <h1>🌸 Hello there... 🌸</h1>
     <h2>May I know your name first? 💌</h2>
@@ -108,13 +111,21 @@ img.profile {
 let personName = "";
 let uploadedImage = "";
 
-// Preview uploaded image
+// Fix autoplay restriction on mobile
+document.addEventListener("click", function() {
+    const music = document.getElementById("bgMusic");
+    music.play().catch(() => {});
+}, { once: true });
+
+// Image upload preview
 document.getElementById("myImage").addEventListener("change", function(e){
     const reader = new FileReader();
     reader.onload = function(event) {
         uploadedImage = event.target.result;
     }
-    reader.readAsDataURL(e.target.files[0]);
+    if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+    }
 });
 
 function startConfession() {
@@ -134,7 +145,7 @@ function startConfession() {
             ${uploadedImage ? `<img src="${uploadedImage}" class="profile">` : ""}
 
             <h2>My name is Bal, it is my pleasure to be your valentine. 💖</h2>
-            <h2>I hate to do this but, I would like to invite you to be my valentine. 🌸</h2>
+            <h2>I feel embarrassed to ask for this but, I would like to invite you to be my valentine. 🌸</h2>
 
             <div class="countdown" id="countdown"></div>
 
@@ -163,7 +174,21 @@ function sayYes() {
         <div class="screen" style="background:#ff3f81;color:white;">
             <h1>YAAAY ${personName.toUpperCase()} 💖💖💖</h1>
             <h2>You have accepted Bal's invitation 🌸✨</h2>
-            <h3>*confetti, anime sparkles, dramatic OST plays*</h3>
+            <h2 style="margin-top:20px;">
+                YESS! You're now already reserved for me. OKAY? 😌💘
+            </h2>
+            <button class="primary" onclick="finalScene()">OKAY 😳</button>
+        </div>
+    `;
+}
+
+function finalScene() {
+    document.body.innerHTML = `
+        <div class="screen" style="background:linear-gradient(135deg,#ff3f81,#ff8fab);color:white;">
+            <h1>✨ CONTRACT SEALED ✨</h1>
+            <h2>${personName}, you are officially my Valentine. 💖</h2>
+            <h3>No returns. No refunds. Valid until next February 14. 😈🌸</h3>
+            <h4>*anime ending credits roll*</h4>
         </div>
     `;
 }
