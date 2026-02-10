@@ -14,7 +14,7 @@ body {
     background: linear-gradient(135deg, #ffc1e3, #c9f0ff);
     text-align: center;
     overflow-x: hidden;
-    color: black; /* default text color is black */
+    color: black;
 }
 
 .screen {
@@ -28,7 +28,7 @@ body {
 
 h1,h2,h3,h4 { 
     margin: 10px 0; 
-    color: black; /* ensure all headings are black */
+    color: black;
 }
 
 input {
@@ -73,7 +73,7 @@ img.profile {
 }
 
 iframe#ytMusic {
-    display: none; /* hidden player */
+    display: none;
 }
 
 @media (max-width: 600px) {
@@ -86,12 +86,15 @@ iframe#ytMusic {
 
 <body>
 
-<!-- Persistent YouTube embed as background music -->
-<iframe id="ytMusic" src="https://music.youtube.com/watch?v=xgwQ1UDrQ94&si=l-bq43pkLlY9g0G1" allow="autoplay" frameborder="0"></iframe>
+<!-- Persistent YouTube background music -->
+<iframe id="ytMusic" 
+    src="https://www.youtube.com/embed/xgwQ1UDrQ94?autoplay=1&loop=1&playlist=xgwQ1UDrQ94&controls=0&mute=0&modestbranding=1" 
+    allow="autoplay" frameborder="0">
+</iframe>
 
 <div class="screen" id="nameScreen">
     <h1>🌸 Hello there... 🌸</h1>
-    <h2>Let me have your name, Love. 💌</h2>
+    <h2>May I have your name, Love? 💌</h2>
     <input type="text" id="theirName" placeholder="Enter your name">
     <input type="file" id="myImage" accept="image/*">
     <button class="primary" onclick="startConfession()">Continue 💖</button>
@@ -103,12 +106,12 @@ let uploadedImage = "";
 
 const ytMusic = document.getElementById("ytMusic");
 
-// Ensure mobile browsers allow autoplay
+// Autoplay on mobile after first tap
 document.addEventListener("click", function() {
     ytMusic.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
 }, { once: true });
 
-// Image upload preview
+// Image preview
 document.getElementById("myImage").addEventListener("change", function(e){
     const reader = new FileReader();
     reader.onload = function(event) {
@@ -121,7 +124,7 @@ document.getElementById("myImage").addEventListener("change", function(e){
 
 function startConfession() {
     const nameInput = document.getElementById("theirName").value.trim();
-    if (!nameInput) { alert("Please let me have your name first 😤💖"); return; }
+    if (!nameInput) { alert("Please tell me your name first 😤💖"); return; }
     personName = nameInput;
 
     document.body.innerHTML = `
@@ -129,7 +132,7 @@ function startConfession() {
             <h1>${personName}... 🌸</h1>
             ${uploadedImage ? `<img src="${uploadedImage}" class="profile">` : ""}
             <h2>My name is Bal, it is my pleasure to be your valentine. 💖</h2>
-            <h2>I feel embarrassed to ask you this but, I would like to invite you to be my valentine. 🌸</h2>
+            <h2>I feel embarrassed to ask this but, I would like to invite you to be my valentine. 🌸</h2>
             <div class="countdown" id="countdown"></div>
             <button class="primary" onclick="sayYes()">YES 💘</button>
             <button class="no" id="noBtn">No 😈</button>
