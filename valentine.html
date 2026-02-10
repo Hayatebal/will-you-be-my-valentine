@@ -14,6 +14,7 @@ body {
     background: linear-gradient(135deg, #ffc1e3, #c9f0ff);
     text-align: center;
     overflow-x: hidden;
+    color: black; /* default text color is black */
 }
 
 .screen {
@@ -25,8 +26,10 @@ body {
     padding: 20px;
 }
 
-h1,h2,h3,h4 { margin: 10px 0; }
-h1,h2 { color: #ff3f81; }
+h1,h2,h3,h4 { 
+    margin: 10px 0; 
+    color: black; /* ensure all headings are black */
+}
 
 input {
     padding: 12px;
@@ -36,6 +39,7 @@ input {
     margin: 10px;
     width: 90%;
     max-width: 300px;
+    color: black;
 }
 
 button {
@@ -62,7 +66,15 @@ img.profile {
     margin: 15px 0;
 }
 
-.countdown { margin: 10px; font-size: 16px; color: #444; }
+.countdown { 
+    margin: 10px; 
+    font-size: 16px; 
+    color: black; /* countdown text black */
+}
+
+iframe#ytMusic {
+    display: none; /* hidden player */
+}
 
 @media (max-width: 600px) {
     h1 { font-size: 22px; }
@@ -74,13 +86,8 @@ img.profile {
 
 <body>
 
-<audio id="bgMusic" loop>
-    <source src="romantic.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="dramaticMusic">
-    <source src="dramatic-ending.mp3" type="audio/mpeg">
-</audio>
+<!-- YouTube embed as background music -->
+<iframe id="ytMusic" src="https://www.youtube.com/embed/xgwQ1UDrQ94?autoplay=1&loop=1&playlist=xgwQ1UDrQ94&controls=0&mute=0&modestbranding=1" allow="autoplay" frameborder="0"></iframe>
 
 <div class="screen" id="nameScreen">
     <h1>🌸 Hello there... 🌸</h1>
@@ -94,15 +101,11 @@ img.profile {
 let personName = "";
 let uploadedImage = "";
 
-const bgMusic = document.getElementById("bgMusic");
-const dramaticMusic = document.getElementById("dramaticMusic");
+const ytMusic = document.getElementById("ytMusic");
 
-// Ensure music plays after first user interaction
+// Ensure mobile browsers allow autoplay
 document.addEventListener("click", function() {
-    if (bgMusic.paused) {
-        bgMusic.volume = 0.6;
-        bgMusic.play().catch(()=>{});
-    }
+    ytMusic.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
 }, { once: true });
 
 // Image upload preview
@@ -118,7 +121,7 @@ document.getElementById("myImage").addEventListener("change", function(e){
 
 function startConfession() {
     const nameInput = document.getElementById("theirName").value.trim();
-    if (!nameInput) { alert("Please tell me your name first 😤💖"); return; }
+    if (!nameInput) { alert("Please give me your name, Love 😤💖"); return; }
     personName = nameInput;
 
     document.body.innerHTML = `
@@ -126,7 +129,7 @@ function startConfession() {
             <h1>${personName}... 🌸</h1>
             ${uploadedImage ? `<img src="${uploadedImage}" class="profile">` : ""}
             <h2>My name is Bal, it is my pleasure to be your valentine. 💖</h2>
-            <h2>I feel embarrassed to ask for this but, I would like to invite you to be my valentine. 🌸</h2>
+            <h2>I feel embarrassed to ask you this but, I would like to invite you to be my valentine. 🌸</h2>
             <div class="countdown" id="countdown"></div>
             <button class="primary" onclick="sayYes()">YES 💘</button>
             <button class="no" id="noBtn">No 😈</button>
@@ -149,7 +152,7 @@ function setupNoButton() {
 
 function sayYes() {
     document.body.innerHTML = `
-        <div class="screen" style="background:#ff3f81;color:white;">
+        <div class="screen" style="background:#ff3f81;color:black;">
             <h1>YAAAY ${personName.toUpperCase()} 💖💖💖</h1>
             <h2>You have accepted Bal's invitation 🌸✨</h2>
             <h2 style="margin-top:20px;">
@@ -161,14 +164,8 @@ function sayYes() {
 }
 
 function finalScene() {
-    // stop romantic bg music
-    bgMusic.pause();
-    // play dramatic ending
-    dramaticMusic.volume = 0.7;
-    dramaticMusic.play().catch(()=>{});
-
     document.body.innerHTML = `
-        <div class="screen" style="background:linear-gradient(135deg,#ff3f81,#ff8fab);color:white;">
+        <div class="screen" style="background:linear-gradient(135deg,#ff3f81,#ff8fab);color:black;">
             <h1>✨ CONTRACT SEALED ✨</h1>
             <h2>${personName}, you are officially my Valentine. 💖</h2>
             <h3>No returns. No refunds. Valid until next February 14. 😈🌸</h3>
@@ -181,12 +178,10 @@ function startCountdown() {
     function updateCountdown() {
         const now = new Date();
         let year = now.getFullYear();
-        let valentines = new Date(year, 1, 14); // Feb 14
-
+        let valentines = new Date(year, 1, 14);
         if (now > valentines) valentines = new Date(year+1,1,14);
 
         const diff = valentines - now;
-
         const days = Math.floor(diff / (1000*60*60*24));
         const hours = Math.floor((diff / (1000*60*60)) % 24);
         const minutes = Math.floor((diff / (1000*60)) % 60);
